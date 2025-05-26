@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "auth": {
+      "demoapp2d44c8c3": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

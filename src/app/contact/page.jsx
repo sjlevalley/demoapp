@@ -1,5 +1,6 @@
 "use client"
 
+import PageTitle from "@/components/PageTitle"
 import {
   Box,
   Container,
@@ -53,20 +54,7 @@ export default function Contact() {
 
   return (
     <Box bgGradient={bgGradient} minH="100vh">
-      {/* Page Title */}
-      <Box py={8}>
-        <Container maxW="container.2xl" px={4}>
-          <Heading
-            as="h1"
-            size="3xl"
-            mb={6}
-            bgGradient="linear(to-r, cyan.400, blue.500)"
-            bgClip="text"
-          >
-            Contact
-          </Heading>
-        </Container>
-      </Box>
+      <PageTitle title="Contact" />
 
       {/* Contact Info Section */}
       <Box py={8}>

@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "demoapp2d44c8c3": {}
+      },
+      "function": {
+        "demoAppEmailVerificationHandler": {
+          "deploymentBucketName": "amplify-demoapp-dev-125852-deployment",
+          "s3Key": "amplify-builds/demoAppEmailVerificationHandler-61704c58716447794171-build.zip"
+        }
       }
     }
   }

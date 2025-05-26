@@ -1,4 +1,22 @@
 {
+  "api": {
+    "demoapp": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
   "auth": {
     "demoapp2d44c8c3": {
       "customAuth": false,
@@ -25,6 +43,40 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "demoAppEmailVerificationHandler": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "demoapp2d44c8c3"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_demoAppEmailVerificationHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "demoAppEmailVerificationHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_demoAppEmailVerificationHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "demoAppEmailVerificationHandler"
+        }
+      ]
     }
   }
 }

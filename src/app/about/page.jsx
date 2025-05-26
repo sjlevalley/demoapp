@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react"
 import { FiAward, FiUsers, FiMapPin } from "react-icons/fi"
 import OurServices from "@/components/OurServices"
+import PageTitle from "@/components/PageTitle"
 
 export default function About() {
   const bgGradient = useColorModeValue(
@@ -45,19 +46,7 @@ export default function About() {
 
   return (
     <Box bgGradient={bgGradient} minH="100vh">
-      {/* Page Title */}
-      <Box>
-        <Container maxW="container.2xl" px={4}>
-          <Heading
-            as="h1"
-            size="xl"
-            bgGradient="linear(to-r, cyan.400, blue.500)"
-            bgClip="text"
-          >
-            About
-          </Heading>
-        </Container>
-      </Box>
+      <PageTitle title="About" />
 
       {/* Hero Section */}
       <Box py={8}>
