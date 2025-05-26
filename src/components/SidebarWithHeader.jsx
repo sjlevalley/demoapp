@@ -125,6 +125,7 @@ const NavItem = ({ icon, children, href, ...rest }) => {
 }
 
 const MobileNav = ({ onOpen, ...rest }) => {
+  const { user } = useSelector((state) => state.user)
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
