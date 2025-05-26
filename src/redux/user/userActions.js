@@ -31,11 +31,13 @@ export const handleUserSignup = ({ email, password }) => async (dispatch) => {
 }
 
 export const handleConfirmSignup = ({ email, code }) => async (dispatch) => {
+    console.log("handleConfirmSignup", email, code)
     try {
         dispatch(setLoading(true))
-        await confirmSignUp({ username: email, code })
+        await confirmSignUp({ username: email, confirmationCode: code })
         return true
     } catch (error) {
+        console.log("error", error)
         dispatch(setError(error.message))
         throw error
     }

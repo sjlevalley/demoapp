@@ -1,9 +1,6 @@
 "use client"
 
-import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
-import { useDispatch } from "react-redux"
-import { useToast } from "@chakra-ui/react"
 import {
   Box,
   Button,
@@ -13,9 +10,15 @@ import {
   VStack,
   Text,
   Link,
+  useToast,
   FormErrorMessage,
+  Heading,
+  Container,
+  useColorModeValue,
 } from "@chakra-ui/react"
+import { useDispatch } from "react-redux"
 import { handleConfirmSignup } from "@/redux/user/userActions"
+import { useForm } from "react-hook-form"
 
 export default function ConfirmSignupPage() {
   const router = useRouter()
@@ -26,6 +29,13 @@ export default function ConfirmSignupPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm()
+
+  const bgGradient = useColorModeValue(
+    "linear(to-br, gray.50, white)",
+    "linear(to-br, gray.900, gray.800)"
+  )
+  const cardBg = useColorModeValue("white", "gray.800")
+  const borderColor = useColorModeValue("gray.200", "gray.700")
 
   const onSubmit = async (data) => {
     try {
@@ -50,51 +60,93 @@ export default function ConfirmSignupPage() {
   }
 
   return (
-    <Box maxW="md" mx="auto" mt={8} p={6} borderWidth={1} borderRadius="lg">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack spacing={4}>
-          <FormControl isInvalid={errors.email}>
-            <FormLabel>Email</FormLabel>
-            <Input
-              type="email"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
-                },
-              })}
-            />
-            <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={errors.code}>
-            <FormLabel>Verification Code</FormLabel>
-            <Input
-              {...register("code", {
-                required: "Verification code is required",
-              })}
-            />
-            <FormErrorMessage>{errors.code?.message}</FormErrorMessage>
-          </FormControl>
-
-          <Button
-            type="submit"
-            colorScheme="blue"
-            width="full"
-            isLoading={isSubmitting}
-          >
-            Verify Email
-          </Button>
-
-          <Text>
-            Didn't receive a code?{" "}
-            <Link color="blue.500" onClick={() => router.push("/auth/signup")}>
-              Sign up again
-            </Link>
-          </Text>
-        </VStack>
-      </form>
+    <Box bgGradient={bgGradient} minH="100vh" py={10}>
+      <Container maxW="container.sm">
+        <Box
+          w="full"
+          p={8}
+          borderWidth={1}
+          borderRadius="xl"
+          boxShadow="2xl"
+          bg={cardBg}
+          borderColor={borderColor}
+          transition="all 0.3s"
+          _hover={{
+            transform: "translateY(-5px)",
+            boxShadow: "2xl",
+          }}
+        >
+          <VStack spacing={6} align="stretch">
+            <Heading
+              textAlign="center"
+              size="xl"
+              mb={6}
+              bgGradient="linear(to-r, cyan.400, blue.500)"
+              bgClip="text"
+            >
+              Verify Email
+            </Heading>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <VStack spacing={4}>
+                <FormControl isInvalid={errors.email}>
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    type="email"
+                    size="lg"
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Invalid email address",
+                      },
+                    })}
+                  />
+                  <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={errors.code}>
+                  <FormLabel>Verification Code</FormLabel>
+                  <Input
+                    type="text"
+                    size="lg"
+                    {...register("code", {
+                      required: "Verification code is required",
+                    })}
+                  />
+                  <FormErrorMessage>{errors.code?.message}</FormErrorMessage>
+                </FormControl>
+                <Button
+                  type="submit"
+                  colorScheme="blue"
+                  size="lg"
+                  width="full"
+                  isLoading={isSubmitting}
+                  mt={4}
+                  bgGradient="linear(to-r, cyan.400, blue.500)"
+                  _hover={{
+                    bgGradient: "linear(to-r, cyan.500, blue.600)",
+                  }}
+                >
+                  Verify Email
+                </Button>
+              </VStack>
+            </form>
+            <Text
+              textAlign="center"
+              mt={4}
+              color={useColorModeValue("gray.600", "gray.300")}
+            >
+              Didn't receive a code?{" "}
+              <Link
+                color="blue.500"
+                onClick={() => router.push("/auth/signup")}
+                _hover={{ textDecoration: "underline" }}
+              >
+                Sign up again
+              </Link>
+            </Text>
+          </VStack>
+        </Box>
+      </Container>
     </Box>
   )
 }
