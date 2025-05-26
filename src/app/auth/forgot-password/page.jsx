@@ -1,7 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
+import { useToast } from "@chakra-ui/react"
 import {
   Box,
   Button,
@@ -9,29 +11,28 @@ import {
   FormLabel,
   Input,
   VStack,
-  Heading,
   Text,
   Link,
-  useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react"
-import { useDispatch } from "react-redux"
 import { handleForgotPassword } from "@/redux/user/userActions"
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const dispatch = useDispatch()
   const toast = useToast()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+  const onSubmit = async (data) => {
     try {
-      await dispatch(handleForgotPassword({ email }))
+      await dispatch(handleForgotPassword(data))
       toast({
-        title: "Success",
-        description: "Check your email for the confirmation code",
+        title: "Reset code sent",
+        description: "Please check your email for the reset code",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -45,59 +46,45 @@ export default function ForgotPasswordPage() {
         duration: 5000,
         isClosable: true,
       })
-    } finally {
-      setIsLoading(false)
     }
   }
 
   return (
-    <Box
-      minH="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <Box
-        w="full"
-        maxW="md"
-        p={8}
-        borderWidth={1}
-        borderRadius="lg"
-        boxShadow="lg"
-      >
-        <VStack spacing={4} align="stretch">
-          <Heading textAlign="center">Reset Password</Heading>
-          <Text textAlign="center">
-            Enter your email address and we'll send you a code to reset your
-            password.
-          </Text>
-          <form onSubmit={handleSubmit}>
-            <VStack spacing={4}>
-              <FormControl isRequired>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </FormControl>
-              <Button
-                type="submit"
-                colorScheme="blue"
-                width="full"
-                isLoading={isLoading}
-              >
-                Send Reset Code
-              </Button>
-            </VStack>
-          </form>
-          <Box textAlign="center">
-            <Link href="/auth/login" color="blue.500">
-              Back to Sign In
+    <Box maxW="md" mx="auto" mt={8} p={6} borderWidth={1} borderRadius="lg">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <VStack spacing={4}>
+          <FormControl isInvalid={errors.email}>
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              })}
+            />
+            <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+          </FormControl>
+
+          <Button
+            type="submit"
+            colorScheme="blue"
+            width="full"
+            isLoading={isSubmitting}
+          >
+            Send Reset Code
+          </Button>
+
+          <Text>
+            Remember your password?{" "}
+            <Link color="blue.500" onClick={() => router.push("/auth/login")}>
+              Sign in
             </Link>
-          </Box>
+          </Text>
         </VStack>
-      </Box>
+      </form>
     </Box>
   )
 }

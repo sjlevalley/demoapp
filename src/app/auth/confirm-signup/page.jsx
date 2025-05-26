@@ -1,6 +1,9 @@
 "use client"
 
+import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
+import { useToast } from "@chakra-ui/react"
 import {
   Box,
   Button,
@@ -10,32 +13,26 @@ import {
   VStack,
   Text,
   Link,
-  useToast,
   FormErrorMessage,
 } from "@chakra-ui/react"
-import { useDispatch } from "react-redux"
-import { handleConfirmResetPassword } from "@/redux/user/userActions"
-import { useForm } from "react-hook-form"
+import { handleConfirmSignup } from "@/redux/user/userActions"
 
-export default function ConfirmResetPasswordPage() {
+export default function ConfirmSignupPage() {
   const router = useRouter()
   const dispatch = useDispatch()
   const toast = useToast()
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm()
 
-  const newPassword = watch("newPassword")
-
   const onSubmit = async (data) => {
     try {
-      await dispatch(handleConfirmResetPassword(data))
+      await dispatch(handleConfirmSignup(data))
       toast({
-        title: "Password reset successful",
-        description: "You can now sign in with your new password",
+        title: "Email verified",
+        description: "Your account has been verified successfully",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -72,43 +69,13 @@ export default function ConfirmResetPasswordPage() {
           </FormControl>
 
           <FormControl isInvalid={errors.code}>
-            <FormLabel>Reset Code</FormLabel>
+            <FormLabel>Verification Code</FormLabel>
             <Input
               {...register("code", {
-                required: "Reset code is required",
+                required: "Verification code is required",
               })}
             />
             <FormErrorMessage>{errors.code?.message}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={errors.newPassword}>
-            <FormLabel>New Password</FormLabel>
-            <Input
-              type="password"
-              {...register("newPassword", {
-                required: "New password is required",
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters",
-                },
-              })}
-            />
-            <FormErrorMessage>{errors.newPassword?.message}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={errors.confirmPassword}>
-            <FormLabel>Confirm New Password</FormLabel>
-            <Input
-              type="password"
-              {...register("confirmPassword", {
-                required: "Please confirm your new password",
-                validate: (value) =>
-                  value === newPassword || "Passwords do not match",
-              })}
-            />
-            <FormErrorMessage>
-              {errors.confirmPassword?.message}
-            </FormErrorMessage>
           </FormControl>
 
           <Button
@@ -117,13 +84,13 @@ export default function ConfirmResetPasswordPage() {
             width="full"
             isLoading={isSubmitting}
           >
-            Reset Password
+            Verify Email
           </Button>
 
           <Text>
-            Remember your password?{" "}
-            <Link color="blue.500" onClick={() => router.push("/auth/login")}>
-              Sign in
+            Didn't receive a code?{" "}
+            <Link color="blue.500" onClick={() => router.push("/auth/signup")}>
+              Sign up again
             </Link>
           </Text>
         </VStack>

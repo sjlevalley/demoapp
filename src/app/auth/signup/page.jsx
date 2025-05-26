@@ -8,7 +8,6 @@ import {
   FormLabel,
   Input,
   VStack,
-  Heading,
   Text,
   Link,
   useToast,
@@ -19,21 +18,28 @@ import { handleUserSignup } from "@/redux/user/userActions"
 import { useForm } from "react-hook-form"
 
 export default function SignupPage() {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const toast = useToast()
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
   } = useForm()
-  const router = useRouter()
-  const dispatch = useDispatch()
-  const toast = useToast()
 
   const password = watch("password")
 
   const onSubmit = async (data) => {
     try {
       await dispatch(handleUserSignup(data))
+      toast({
+        title: "Signup successful",
+        description: "Please check your email for verification code",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      })
       router.push("/auth/confirm-signup")
     } catch (error) {
       toast({
@@ -100,7 +106,7 @@ export default function SignupPage() {
                   {...register("confirmPassword", {
                     required: "Please confirm your password",
                     validate: (value) =>
-                      value === password || "The passwords do not match",
+                      value === password || "Passwords do not match",
                   })}
                 />
                 <FormErrorMessage>
@@ -120,8 +126,8 @@ export default function SignupPage() {
           <Box textAlign="center">
             <Text>
               Already have an account?{" "}
-              <Link href="/auth/login" color="blue.500">
-                Sign In
+              <Link color="blue.500" onClick={() => router.push("/auth/login")}>
+                Sign in
               </Link>
             </Text>
           </Box>
