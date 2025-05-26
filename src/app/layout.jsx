@@ -5,6 +5,7 @@ import { Amplify } from "aws-amplify"
 import ConfigureAmplifyClientSide from "../components/ConfigureAmplifyClientSide"
 import "./globals.css"
 import awsmobile from "../aws-exports"
+import HubListener from "@/components/HubListener"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
       <body className={geistSans.variable}>
         <ConfigureAmplifyClientSide config={awsmobile} />
         <Providers>
+          <HubListener />
           <SidebarWithHeader>{children}</SidebarWithHeader>
         </Providers>
       </body>

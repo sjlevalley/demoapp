@@ -33,7 +33,15 @@ import {
   DrawerHeader,
   DrawerBody,
 } from "@chakra-ui/react"
-import { FiHome, FiMenu, FiSettings, FiUsers, FiLogOut } from "react-icons/fi"
+import {
+  FiHome,
+  FiMenu,
+  FiSettings,
+  FiUsers,
+  FiLogOut,
+  FiLogIn,
+} from "react-icons/fi"
+import { SunIcon, MoonIcon } from "@chakra-ui/icons"
 import { usePathname, useRouter } from "next/navigation"
 import { useSelector, useDispatch } from "react-redux"
 import { handleUserLogout } from "@/redux/user/userActions"
@@ -49,7 +57,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
   const pathname = usePathname()
   const router = useRouter()
   const dispatch = useDispatch()
-  const { colorMode, toggleColorMode } = useColorMode()
+  const user = useSelector((state) => state.user.user)
 
   const handleLogout = async () => {
     try {
@@ -87,18 +95,17 @@ const SidebarContent = ({ onClose, ...rest }) => {
           {link.name}
         </NavItem>
       ))}
-      <NavItem icon={FiLogOut} onClick={handleLogout}>
-        Logout
-      </NavItem>
-      <Button
-        position="absolute"
-        bottom="4"
-        left="4"
-        right="4"
-        onClick={toggleColorMode}
-      >
-        Toggle {colorMode === "light" ? "Dark" : "Light"}
-      </Button>
+      <Box position="absolute" bottom="4" left="4" right="4">
+        {user ? (
+          <NavItem icon={FiLogOut} onClick={handleLogout}>
+            Logout
+          </NavItem>
+        ) : (
+          <NavItem icon={FiLogIn} href="/auth/login">
+            Login / Sign Up
+          </NavItem>
+        )}
+      </Box>
     </Box>
   )
 }
@@ -143,6 +150,20 @@ const NavItem = ({ icon, children, href, isActive, onClick, ...rest }) => {
 }
 
 const MobileNav = ({ onOpen, ...rest }) => {
+  const user = useSelector((state) => state.user.user)
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const { colorMode, toggleColorMode } = useColorMode()
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(handleUserLogout())
+      router.push("/auth/login")
+    } catch (error) {
+      console.error("Logout failed:", error)
+    }
+  }
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -162,6 +183,55 @@ const MobileNav = ({ onOpen, ...rest }) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
+
+      <HStack spacing={{ base: "0", md: "6" }}>
+        <IconButton
+          aria-label="Toggle color mode"
+          icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          onClick={toggleColorMode}
+          variant="ghost"
+          size="md"
+        />
+        <Flex alignItems="center">
+          <Menu>
+            <MenuButton
+              py={2}
+              transition="all 0.3s"
+              _focus={{ boxShadow: "none" }}
+            >
+              <HStack>
+                <Avatar
+                  size="sm"
+                  name={user?.email || "Guest"}
+                  bg={useColorModeValue("blue.400", "blue.600")}
+                />
+                <VStack
+                  display={{ base: "none", md: "flex" }}
+                  alignItems="flex-start"
+                  spacing="1px"
+                  ml="2"
+                >
+                  <Text fontSize="sm">
+                    {user ? `Welcome, ${user.email}` : "Welcome, Guest"}
+                  </Text>
+                </VStack>
+              </HStack>
+            </MenuButton>
+            <MenuList
+              bg={useColorModeValue("white", "gray.900")}
+              borderColor={useColorModeValue("gray.200", "gray.700")}
+            >
+              {user ? (
+                <MenuItem onClick={handleLogout}>Sign out</MenuItem>
+              ) : (
+                <MenuItem onClick={() => router.push("/auth/login")}>
+                  Sign in
+                </MenuItem>
+              )}
+            </MenuList>
+          </Menu>
+        </Flex>
+      </HStack>
     </Flex>
   )
 }
