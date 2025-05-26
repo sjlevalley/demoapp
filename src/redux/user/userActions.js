@@ -1,11 +1,12 @@
-import { autoSignIn, confirmResetPassword, confirmSignIn, confirmSignUp, confirmUserAttribute, fetchUserAttributes, resendSignUpCode, resetPassword, signIn, signOut, signUp, updateUserAttributes } from 'aws-amplify/auth';
-import { setUser, setLoading, setError, logout } from './userSlice'
+import { confirmResetPassword, confirmSignUp, resetPassword, signIn, signOut, signUp } from 'aws-amplify/auth';
+import { logout, setError, setLoading, setUser } from './userSlice';
 
-export const handleUserLogin = ({ email, password }) => async (dispatch) => {
+export const handleUserLogin = ({ email, password }, router) => async (dispatch) => {
     try {
         dispatch(setLoading(true))
         const user = await signIn({ username: email, password })
         dispatch(setUser(user))
+        router.push('/')
         return user
     } catch (error) {
         dispatch(setError(error.message))
@@ -46,7 +47,7 @@ export const handleConfirmSignup = ({ email, code }) => async (dispatch) => {
 export const handleForgotPassword = ({ email }) => async (dispatch) => {
     try {
         dispatch(setLoading(true))
-        await forgotPassword({ username: email })
+        await resetPassword({ username: email })
         return true
     } catch (error) {
         dispatch(setError(error.message))
@@ -57,7 +58,11 @@ export const handleForgotPassword = ({ email }) => async (dispatch) => {
 export const handleConfirmResetPassword = ({ email, code, newPassword }) => async (dispatch) => {
     try {
         dispatch(setLoading(true))
-        await forgotPasswordSubmit({ username: email, code, newPassword })
+        await confirmResetPassword({
+            username: email,
+            confirmationCode: code,
+            newPassword,
+        })
         return true
     } catch (error) {
         dispatch(setError(error.message))

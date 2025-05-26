@@ -39,7 +39,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data) => {
     try {
-      await dispatch(handleUserLogin(data))
+      await dispatch(handleUserLogin(data, router))
       toast({
         title: "Login successful",
         status: "success",

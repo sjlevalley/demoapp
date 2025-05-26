@@ -1,40 +1,31 @@
 "use client"
 
 import {
+  EmbeddedTeamIllustration,
+  ProductDevTeamIllustration,
+  WebAppsTeamIllustration,
+} from "@/components/HomeIllustrations"
+import OurServices from "@/components/OurServices"
+import {
   Box,
+  Center,
   Container,
   Heading,
-  Text,
-  VStack,
-  SimpleGrid,
-  Flex,
   Icon,
-  useColorModeValue,
-  Button,
-  Input,
-  Textarea,
-  FormControl,
-  FormLabel,
+  SimpleGrid,
   Stack,
-  Divider,
-  Center,
+  Text,
+  useColorModeValue,
+  VStack,
 } from "@chakra-ui/react"
 import {
-  FiMail,
-  FiMessageSquare,
+  FiBriefcase,
   FiCode,
   FiCpu,
   FiGlobe,
-  FiBriefcase,
   FiInfo,
+  FiMail,
 } from "react-icons/fi"
-import {
-  ProductDevTeamIllustration,
-  WebAppsTeamIllustration,
-  EmbeddedTeamIllustration,
-  AwardIllustration,
-} from "@/components/HomeIllustrations"
-import OurServices from "@/components/OurServices"
 
 export default function Home() {
   const bgGradient = useColorModeValue(

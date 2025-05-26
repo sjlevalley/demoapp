@@ -38,7 +38,7 @@ export default function ConfirmResetPasswordPage() {
   const cardBg = useColorModeValue("white", "gray.800")
   const borderColor = useColorModeValue("gray.200", "gray.700")
 
-  const password = watch("password")
+  const newPassword = watch("newPassword")
 
   const onSubmit = async (data) => {
     try {
@@ -117,12 +117,12 @@ export default function ConfirmResetPasswordPage() {
                   />
                   <FormErrorMessage>{errors.code?.message}</FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={errors.password}>
+                <FormControl isInvalid={errors.newPassword}>
                   <FormLabel>New Password</FormLabel>
                   <Input
                     type="password"
                     size="lg"
-                    {...register("password", {
+                    {...register("newPassword", {
                       required: "Password is required",
                       minLength: {
                         value: 8,
@@ -131,7 +131,7 @@ export default function ConfirmResetPasswordPage() {
                     })}
                   />
                   <FormErrorMessage>
-                    {errors.password?.message}
+                    {errors.newPassword?.message}
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={errors.confirmPassword}>
@@ -142,7 +142,7 @@ export default function ConfirmResetPasswordPage() {
                     {...register("confirmPassword", {
                       required: "Please confirm your password",
                       validate: (value) =>
-                        value === password || "Passwords do not match",
+                        value === newPassword || "Passwords do not match",
                     })}
                   />
                   <FormErrorMessage>

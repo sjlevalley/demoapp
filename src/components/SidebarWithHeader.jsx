@@ -40,6 +40,9 @@ import {
   FiUsers,
   FiLogOut,
   FiLogIn,
+  FiInfo,
+  FiBriefcase,
+  FiMail,
 } from "react-icons/fi"
 import { SunIcon, MoonIcon } from "@chakra-ui/icons"
 import { usePathname, useRouter } from "next/navigation"
@@ -49,8 +52,9 @@ import NextLink from "next/link"
 
 const LinkItems = [
   { name: "Home", icon: FiHome, href: "/" },
-  { name: "Users", icon: FiUsers, href: "/users" },
-  { name: "Settings", icon: FiSettings, href: "/settings" },
+  { name: "About", icon: FiInfo, href: "/about" },
+  { name: "Jobs", icon: FiBriefcase, href: "/jobs" },
+  { name: "Contact", icon: FiMail, href: "/contact" },
 ]
 
 const SidebarContent = ({ onClose, ...rest }) => {
