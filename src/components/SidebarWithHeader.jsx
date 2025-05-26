@@ -40,6 +40,7 @@ import {
 } from "react-icons/fi"
 import NextLink from "next/link"
 import { usePathname } from "next/navigation"
+import { useSelector } from "react-redux"
 
 const LinkItems = [
   { name: "Home", icon: FiHome, href: "/" },
@@ -208,6 +209,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 }
 
 export default function SidebarWithHeader({ children }) {
+  const { user } = useSelector((state) => state.user)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { colorMode, toggleColorMode } = useColorMode()
   const pathname = usePathname()
@@ -216,6 +218,8 @@ export default function SidebarWithHeader({ children }) {
   const activeBg = useColorModeValue("blue.50", "blue.900")
   const activeColor = useColorModeValue("blue.600", "blue.200")
   const hoverBg = useColorModeValue("gray.50", "gray.700")
+
+  console.log("USER", user)
 
   const navItems = [
     { icon: FiHome, label: "Home", href: "/" },
